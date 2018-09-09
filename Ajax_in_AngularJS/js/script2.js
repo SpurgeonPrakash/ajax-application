@@ -15,15 +15,24 @@
 
 	// handle XHR success
 	function updateUISuccess(response) {
-		var condition = response.weather[0].main;
 		var degC = response.main.temp - 273.15;
-		var degCInt = Math.floor(degC);
 		var degF = degC * 1.8 + 32;
-		var degFInt = Math.floor(degF);
-//		var weatherBox = document.getElementById("weather");
-//		weatherBox.innerHTML = "<p>" + degCInt + "&#176; C / " + degFInt + "&#176; F</p><p>" + condition + "</p>";
-		var $weatherBox = $('#weather');
-		$weatherBox.append("<p>" + degCInt + "&#176; C / " + degFInt + "&#176; F</p><p>" + condition + "</p>");
+		var state = {
+			condition: response.weather[0].main,
+			degCInt: Math.floor(degC),
+			degFInt: Math.floor(degF)
+		};
+		var into = document.querySelector('#weather');
+		ReactDOM.render(<Forecast {...state} />, into);
+
+		function Forecast(props) {
+			return (
+				<div>
+					<p>{props.degCInt}&#176; C / {props.degFInt}&#176; F</p>
+					<p>{props.condition}</p>
+				</div>
+			)
+		}
 	}
 
 	// handle XHR error
